@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WhatsAnnoy</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Now</string>
+    <string name="title_section2">Schedule</string>
+    <string name="title_section3">Random</string>
+
+    <string name="section1_button">Play</string>
+    <string name="section1_label">Play the sound now</string>
+
+    <string name="section2_button1">Play</string>
+    <string name="section2_button2">Stop</string>
+
+    <string name="section3_pbar">Progress…</string>
+    <string name="section3_label">Time frequency of the sound</string>
+
+</resources>

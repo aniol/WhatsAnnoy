@@ -22,13 +22,10 @@ local.properties
 # Android Studio
 .idea/
 .gradle
-gradlew.*
 /*/local.properties
 /*/out
-/*/gradle
-/*/gradlew
-/*/*/build
-/*/*/production
+/*/build
+/*/production
 *.iml
 *.iws
 *.ipr

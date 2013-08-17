@@ -1,11 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
-    }
-}
+
 apply plugin: 'android'
 
 repositories {
@@ -13,17 +6,36 @@ repositories {
 }
 
 android {
-    compileSdkVersion 17
+
+
+    compileSdkVersion 18
     buildToolsVersion "18.0.1"
 
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 18
     }
+    
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            resources.srcDirs = ['src']
+            res.srcDirs = ['src/main/res']
+
+        }
+    }
 }
 
 dependencies {
     compile 'com.android.support:support-v4:18.0.+'
     compile 'com.android.support:appcompat-v7:18.0.+'
-    compile project (':HoloEverywhere:library')
+    compile project (':library')
+    compile project (':addons-preferences')
 }

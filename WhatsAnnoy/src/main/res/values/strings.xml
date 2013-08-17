@@ -17,4 +17,5 @@
     <string name="section3_pbar">Progress…</string>
     <string name="section3_label">Time frequency of the sound</string>
 
+    <string name="list_empty">No items to show</string>
 </resources>

@@ -19,6 +19,9 @@
 
 <resources>
 
+    <!--    Changed parent theme to Holo.Theme.Light because of HoloEverywhere.
+            Original was Theme.AppCompat.Light
+    -->
     <style name="Theme.Whatsannoy" parent="@style/Holo.Theme.Light">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_whatsannoy</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Whatsannoy</item>

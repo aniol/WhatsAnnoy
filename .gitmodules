@@ -1,3 +1,4 @@
 [submodule "HoloEverywhere"]
 	path = HoloEverywhere
 	url = git@github.com:wuyingren/HoloEverywhere.git
+	branch = abc

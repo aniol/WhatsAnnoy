@@ -10,4 +10,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/listView"
             android:layout_gravity="center"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/empty"
+            android:text="@string/list_empty"/>
 </LinearLayout>

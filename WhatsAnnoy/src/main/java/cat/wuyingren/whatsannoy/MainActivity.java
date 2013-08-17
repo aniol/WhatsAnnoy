@@ -1,5 +1,6 @@
 package cat.wuyingren.whatsannoy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,12 +10,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 //import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.DatePickerDialog;
+import org.holoeverywhere.app.DialogFragment;
 
 import java.util.Locale;
 
 import cat.wuyingren.whatsannoy.fragments.SectionFragment;
+import cat.wuyingren.whatsannoy.fragments.TimePickerFragment;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -80,6 +85,31 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_new:
+                scheduleNew();
+                return true;
+            case R.id.action_settings:
+                openSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void scheduleNew() {
+        DialogFragment df = new TimePickerFragment();
+        df.show(getSupportFragmentManager(), "timePicker");
+
+    }
+
+    private void openSettings() {
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

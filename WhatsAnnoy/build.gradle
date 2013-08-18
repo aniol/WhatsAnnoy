@@ -16,12 +16,12 @@ android {
         targetSdkVersion 18
     }
     
-    buildTypes {
+   /* buildTypes {
         release {
             runProguard true
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
-    }
+    }*/
 
     sourceSets {
         main {

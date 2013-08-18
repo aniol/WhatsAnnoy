@@ -1,10 +1,11 @@
-package cat.wuyingren.whatsannoy;
+package cat.wuyingren.whatsannoy.activities;
 
 import android.os.Bundle;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
 
+import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity {

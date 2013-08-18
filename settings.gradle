@@ -1,9 +1,8 @@
 // Configs on this file will work for both WhatsAnnoy and HE
 
 // Include main project and needed libraries
-include ':WhatsAnnoy'
-include 'addons-preferences', 'library'
+include 'library', 'addons-preferences', ':WhatsAnnoy'
 
 // Define global folder references
-project(':library').projectDir = new File('HoloEverywhere/library')
-project(':addons-preferences').projectDir = new File('HoloEverywhere/addons/preferences')
+project(':library').projectDir = new File(settingsDir, 'HoloEverywhere/library')
+project(':addons-preferences').projectDir = new File(settingsDir, 'HoloEverywhere/addons/preferences')

@@ -18,4 +18,5 @@
     <string name="section3_label">Time frequency of the sound</string>
 
     <string name="list_empty">No items to show</string>
+    <string name="main_credits">Idea and design by @aniol</string>
 </resources>

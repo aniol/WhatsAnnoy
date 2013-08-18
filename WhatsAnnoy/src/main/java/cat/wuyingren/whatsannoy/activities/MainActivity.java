@@ -1,4 +1,4 @@
-package cat.wuyingren.whatsannoy;
+package cat.wuyingren.whatsannoy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,15 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.DatePickerDialog;
 import org.holoeverywhere.app.DialogFragment;
 
 import java.util.Locale;
 
+import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.fragments.SectionFragment;
 import cat.wuyingren.whatsannoy.fragments.TimePickerFragment;
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends Activity implements ActionBar.TabListener, TimePickerFragment.OnDBChangedListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -124,6 +124,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onDBChanged() {
+        SectionFragment f = (SectionFragment) getSupportFragmentManager().findFragmentById(R.id.pager);
+        if(f!=null) {
+            f.updateDB();
+        }
     }
 
     /**

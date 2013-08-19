@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
+
+    <PreferenceCategory
+            holo:title="@string/pref_general_title"
+            holo:key="pref_general_title_settings">
+
+        <RingtonePreference
+                holo:title="@string/pref_title_sound"
+                holo:id="@+id/rtone_pref"
+                holo:key="@string/pref_key_sound"
+                holo:summary="@string/pref_summary_sound"
+                holo:ringtoneType="notification" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            holo:title="@string/pref_about_title"
+            holo:key="pref_about_title_settings">
+
+        <PreferenceScreen
+                holo:key="@string/pref_key_about"
+                holo:title="@string/pref_title_about"
+                holo:persistent="false"
+                holo:summary="@string/pref_summary_about">
+
+            <Preference
+                holo:key="@string/pref_key_credits"
+                holo:title="@string/pref_title_credits" />
+
+            <Preference
+                    holo:key="@string/pref_key_license"
+                    holo:title="@string/pref_title_license" />
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

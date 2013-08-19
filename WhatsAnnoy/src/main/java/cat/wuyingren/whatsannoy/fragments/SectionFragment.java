@@ -6,12 +6,13 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import org.holoeverywhere.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
@@ -19,8 +20,6 @@ import org.holoeverywhere.widget.ProgressBar;
 
 import java.io.IOException;
 import java.util.List;
-
-import org.holoeverywhere.app.Fragment;
 
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.profiles.Schedule;
@@ -33,6 +32,7 @@ public class SectionFragment extends Fragment {
     private ScheduleDataSource dataSource;
     private ArrayAdapter<Schedule> adapter;
     private View rootView;
+    private SharedPreferences prefs;
 
     public SectionFragment() {
 
@@ -44,6 +44,7 @@ public class SectionFragment extends Fragment {
 
         context = getActivity();
         dataSource = new ScheduleDataSource(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int id = getArguments().getInt(ARG_SECTION_NUMBER);
         switch(id) {
             case 1:     // Screen "Now"
@@ -53,7 +54,11 @@ public class SectionFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         try{
-                            Uri ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
+                            String uri = prefs.getString("pref_general_sound_key", "");
+                            Uri ringtone = Uri.parse(uri);
+                            if(uri.isEmpty()) {
+                                ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
+                            }
                             MediaPlayer mPlayer = new MediaPlayer();
                             mPlayer.setDataSource(context, ringtone);
                             AudioManager aManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

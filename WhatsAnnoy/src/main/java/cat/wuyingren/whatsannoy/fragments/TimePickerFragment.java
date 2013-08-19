@@ -12,7 +12,6 @@ import org.holoeverywhere.widget.TimePicker;
 
 import java.util.Calendar;
 
-import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnDismissListener{

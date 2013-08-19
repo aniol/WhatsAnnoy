@@ -1,13 +1,17 @@
 package cat.wuyingren.whatsannoy.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.RingtonePreference;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.preference.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import cat.wuyingren.whatsannoy.R;
+import cat.wuyingren.whatsannoy.activities.MainActivity;
 
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -27,6 +31,20 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(getActivity(), MainActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {

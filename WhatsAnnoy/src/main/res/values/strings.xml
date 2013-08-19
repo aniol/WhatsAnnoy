@@ -24,16 +24,16 @@
     <string name="pref_about_title">About</string>
 
     <string name="pref_title_sound">Sound</string>
-    <string name="pref_key_sound">pref_general_sound_key</string>
     <string name="pref_summary_sound">Choose which sound you like to play</string>
 
-    <string name="pref_key_about">pref_about_key</string>
     <string name="pref_title_about">About Version 0.1</string>ç
     <string name="pref_summary_about">Credits. License.</string>
 
-    <string name="pref_key_credits">pref_about_credits</string>
     <string name="pref_title_credits">Credits</string>
-
-    <string name="pref_key_license">pref_about_license</string>
     <string name="pref_title_license">License</string>
+
+    <string name="pref_title_wa_license">License</string>
+    <string name="mit_license">Information about licensing and distribution</string>
+
+    <string name="error">Error</string>
 </resources>

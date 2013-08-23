@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.DialogFragment;
+import org.holoeverywhere.util.SparseArray;
 
 import java.util.Locale;
 
@@ -21,6 +24,7 @@ import cat.wuyingren.whatsannoy.fragments.SectionFragment;
 import cat.wuyingren.whatsannoy.fragments.TimePickerFragment;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, TimePickerFragment.OnDBChangedListener{
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -88,9 +92,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_new:
-                scheduleNew();
-                return true;
             case R.id.action_settings:
                 openSettings();
                 return true;
@@ -99,11 +100,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
         }
     }
 
-    private void scheduleNew() {
-        DialogFragment df = new TimePickerFragment();
-        df.show(getSupportFragmentManager(), "timePicker");
-
-    }
 
     private void openSettings() {
         Intent i = new Intent(this, SettingsActivity.class);
@@ -127,11 +123,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
 
     @Override
     public void onDBChanged() {
-        SectionFragment f = (SectionFragment) getSupportFragmentManager().findFragmentById(R.id.pager);
-        if(f!=null) {
-            f.updateDB();
-        }
+        Log.e("TAG", "error");
+        SectionFragment sFrag = (SectionFragment)mSectionsPagerAdapter.getRegisteredFragment(1);
+        Log.e("TAG", String.valueOf(sFrag.getArguments().getInt(SectionFragment.ARG_SECTION_NUMBER)));
+        sFrag.updateDB();
     }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -139,6 +136,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -150,9 +148,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
             Bundle args = new Bundle();
             args.putInt(SectionFragment.ARG_SECTION_NUMBER, position + 1);
             fragment.setArguments(args);
+            registeredFragments.put(position, fragment);
             return fragment;
         }
 
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
+        }
         @Override
         public int getCount() {
             // Show 3 total pages.

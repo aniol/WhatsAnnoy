@@ -53,6 +53,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        mCallback.onDBChanged();
         super.onDismiss(dialog);
     }
 

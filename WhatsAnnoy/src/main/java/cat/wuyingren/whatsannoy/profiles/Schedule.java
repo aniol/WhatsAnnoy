@@ -3,9 +3,6 @@ package cat.wuyingren.whatsannoy.profiles;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by jordilb on 18/08/13.
- */
 public class Schedule {
 
     private long id;

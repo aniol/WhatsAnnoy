@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.RingtonePreference;
 import org.holoeverywhere.preference.SharedPreferences;

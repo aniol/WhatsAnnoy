@@ -2,6 +2,7 @@ package cat.wuyingren.whatsannoy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import org.holoeverywhere.app.Activity;
@@ -11,13 +12,17 @@ import cat.wuyingren.whatsannoy.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity {
 
+    private ActionBar actBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actBar = getSupportActionBar();
+
+        actBar.setHomeButtonEnabled(true);
+        actBar.setDisplayHomeAsUpEnabled(true);
 
         // Display the fragment as the main content.
         getSupportFragmentManager().beginTransaction()

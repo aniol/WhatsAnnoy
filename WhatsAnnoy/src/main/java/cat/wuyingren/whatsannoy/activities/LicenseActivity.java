@@ -3,6 +3,7 @@ package cat.wuyingren.whatsannoy.activities;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 
@@ -16,6 +17,7 @@ import cat.wuyingren.whatsannoy.R;
 
 public class LicenseActivity extends Activity {
 
+    private ActionBar actBar;
     private Resources res;
     private TextView tView;
 
@@ -25,9 +27,10 @@ public class LicenseActivity extends Activity {
         setContentView(R.layout.activity_license);
 
         res=getResources();
+        actBar = getSupportActionBar();
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actBar.setHomeButtonEnabled(true);
+        actBar.setDisplayHomeAsUpEnabled(true);
 
         findViews();
         readFile();

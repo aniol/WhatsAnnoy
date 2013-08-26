@@ -1,31 +1,31 @@
 package cat.wuyingren.whatsannoy.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.DialogFragment;
-import org.holoeverywhere.util.SparseArray;
-
-import java.util.Locale;
 
 import cat.wuyingren.whatsannoy.R;
-import cat.wuyingren.whatsannoy.fragments.SectionFragment;
+import cat.wuyingren.whatsannoy.adapters.SectionsPagerAdapter;
+import cat.wuyingren.whatsannoy.fragments.ScheduleFragment;
 import cat.wuyingren.whatsannoy.fragments.TimePickerFragment;
+import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, TimePickerFragment.OnDBChangedListener{
 
 
+    private Context context;
+    private ActionBar actionBar;
+    private Menu menu;
+    private int sdkVer;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -46,13 +46,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
+        sdkVer = SystemUtils.getSdkInt();
+
         // Set up the action bar.
-        final ActionBar actionBar = getSupportActionBar();//getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter.setContext(context);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -65,6 +69,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+
+                // Workaround ActionBarCompat troubles with option menu in pre-3.x devices
+                // Show or hide buttons when needed on page change
+                if(sdkVer<11 && menu!=null) {
+                    if(position==1){
+                        menu.findItem(R.id.action_new).setVisible(true);
+                    }
+                    else {
+                        menu.findItem(R.id.action_new).setVisible(false);
+                    }
+                }
             }
         });
 
@@ -82,6 +97,28 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        this.menu = menu;
+
+        // Workaround ActionBarCompat troubles with option menu in pre-3.x devices.
+        // Hide buttons on pages 1 & 3
+        if(sdkVer<11 && mViewPager.getCurrentItem()!=1) {
+            menu.findItem(R.id.action_new).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Workaround ActionBarCompat troubles with option menu in pre-3.x devices
+        // Nullify menu on orientation change, evades a NPE.
+        menu=null;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -95,11 +132,26 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
             case R.id.action_settings:
                 openSettings();
                 return true;
+            case R.id.action_new:
+
+                // Workaround ActionBarCompat troubles with option menu in pre-3.x devices
+                // If on pre-3.0 device, the button is present and needs to be handled
+                if(sdkVer<11) {
+                    scheduleNew();
+                    return true;
+                }
+                else {
+                    return false;
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void scheduleNew() {
+        DialogFragment df = new TimePickerFragment();
+        df.show(getSupportFragmentManager(), "timePicker");
+    }
 
     private void openSettings() {
         Intent i = new Intent(this, SettingsActivity.class);
@@ -111,6 +163,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
+
     }
 
     @Override
@@ -123,64 +176,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
 
     @Override
     public void onDBChanged() {
-        Log.e("TAG", "error");
-        SectionFragment sFrag = (SectionFragment)mSectionsPagerAdapter.getRegisteredFragment(1);
-        Log.e("TAG", String.valueOf(sFrag.getArguments().getInt(SectionFragment.ARG_SECTION_NUMBER)));
-        sFrag.updateDB();
+        int index = mViewPager.getCurrentItem();
+        SectionsPagerAdapter mAdapter = ((SectionsPagerAdapter)mViewPager.getAdapter());
+        ScheduleFragment scheduleFragment = (ScheduleFragment)mAdapter.getRegisteredFragment(index);
+        scheduleFragment.updateDB();
     }
 
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            Fragment fragment = new SectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(SectionFragment.ARG_SECTION_NUMBER, position + 1);
-            fragment.setArguments(args);
-            registeredFragments.put(position, fragment);
-            return fragment;
-        }
-
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            registeredFragments.remove(position);
-            super.destroyItem(container, position, object);
-        }
-
-        public Fragment getRegisteredFragment(int position) {
-            return registeredFragments.get(position);
-        }
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
-    }
 
 }

@@ -18,7 +18,7 @@ import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
 public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
     private final Context context;
-    private final List<Schedule> values;
+    private List<Schedule> values;
     private final ScheduleDataSource dataSource;
 
     public ScheduleListAdapter(Context context, List<Schedule> values, ScheduleDataSource dataSource) {
@@ -41,12 +41,16 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataSource.open();
                 dataSource.deleteSchedule(s);
-                dataSource.close();
             }
         });
 
         return rowView;
+    }
+
+    public void updateSchedules(List<Schedule> schedules) {
+        this.values.clear();
+        this.values.addAll(schedules);
+        notifyDataSetChanged();
     }
 }

@@ -2,6 +2,7 @@ package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import org.holoeverywhere.preference.PreferenceFragment;
@@ -15,6 +16,7 @@ import cat.wuyingren.whatsannoy.activities.MainActivity;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
+    private ActionBar actBar;
 
     public SettingsFragment() {
 
@@ -25,8 +27,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actBar = getSupportActionBar();
+        actBar.setHomeButtonEnabled(true);
+        actBar.setDisplayHomeAsUpEnabled(true);
 
     }
 

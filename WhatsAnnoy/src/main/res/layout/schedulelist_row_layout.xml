@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
@@ -14,21 +14,16 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/toggleButton"
-            android:layout_alignBottom="@+id/toggleButton"/>
+            android:layout_alignBottom="@+id/toggleButton"
+            android:gravity="center_horizontal"/>
 
-    <ImageButton
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Button"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/content_edit"
-            android:layout_toLeftOf="@+id/Button2"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/textView2"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"/>
 
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Button2"
-            android:background="@drawable/content_discard"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"/>
 </RelativeLayout>

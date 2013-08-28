@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cat.wuyingren.whatsannoy.profiles.Schedule;
+import cat.wuyingren.whatsannoy.utils.Alarm;
+import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
 public class ScheduleDataSource {
 
@@ -30,7 +33,7 @@ public class ScheduleDataSource {
         dbHelper.close();
     }
 
-    public Schedule createSchedule(long date) {
+    public Schedule createSchedule(long date, Context context) {
         ContentValues values = new ContentValues();
         values.put(Constants.SCHEDULE_DATE, date);
         long insertId = database.insert(Constants.TABLE_SCHEDULE, null,
@@ -41,7 +44,19 @@ public class ScheduleDataSource {
         cursor.moveToFirst();
         Schedule schedule = cursorToSchedule(cursor);
         cursor.close();
+        //SystemUtils.createScheduleNotification(context, schedule);
+        Alarm alarm = new Alarm();
+        alarm.setAlarm(context, schedule);
         return schedule;
+    }
+
+    public void updateSchedule(Schedule s) {
+        long id = s.getId();
+        long date = s.getDate();
+        Log.w("TAG", String.valueOf(date));
+        ContentValues values = new ContentValues();
+        values.put(Constants.SCHEDULE_DATE, date);
+        database.update(Constants.TABLE_SCHEDULE, values, Constants._ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public void deleteSchedule(Schedule schedule) {

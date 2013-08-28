@@ -19,13 +19,14 @@ import cat.wuyingren.whatsannoy.fragments.ScheduleFragment;
 import cat.wuyingren.whatsannoy.fragments.TimePickerFragment;
 import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
-public class MainActivity extends Activity implements ActionBar.TabListener, TimePickerFragment.OnDBChangedListener{
+public class MainActivity extends Activity implements ActionBar.TabListener, TimePickerFragment.OnDBChangedListener {
 
 
     private Context context;
     private ActionBar actionBar;
     private Menu menu;
     private int sdkVer;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a

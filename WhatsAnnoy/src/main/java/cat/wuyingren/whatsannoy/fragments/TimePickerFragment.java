@@ -11,20 +11,40 @@ import org.holoeverywhere.app.TimePickerDialog;
 import org.holoeverywhere.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
 
+import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnDismissListener{
 
 
+    public static final String ARG_SCHEDULE = "schedule";
     private ScheduleDataSource dataSource;
     private OnDBChangedListener mCallback;
 
+    private Schedule s;
+    private Bundle args;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        args = getArguments();
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
+
+        if(args!=null) {
+            s = args.getParcelable(ARG_SCHEDULE);
+        }
+
+        if(s!=null) {
+            c.setTimeInMillis(s.getDate());
+        }
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
@@ -39,15 +59,25 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         // Do something with the time chosen by the user
         dataSource = new ScheduleDataSource(getActivity());
         Calendar c = Calendar.getInstance();
+        Date now = c.getTime();
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
 
+        if(c.getTime().before(now)) { // If time selected is before now, set it to tomorrow
+            c.add(Calendar.DAY_OF_YEAR,1);
+        }
 
         long date = c.getTimeInMillis();
         //Schedule schedule = new Schedule();
         //schedule = dataSource.createSchedule(date);
         dataSource.open();
-        dataSource.createSchedule(date);
+        if(s!=null) {
+            s.setDate(date);
+            dataSource.updateSchedule(s);
+        }
+        else {
+            dataSource.createSchedule(date, getSupportActivity());
+        }
         dataSource.close();
     }
 

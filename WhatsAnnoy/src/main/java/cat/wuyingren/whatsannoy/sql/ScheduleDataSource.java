@@ -19,7 +19,8 @@ public class ScheduleDataSource {
     // Database fields
     private SQLiteDatabase database;
     private DBHelper dbHelper;
-    private String[] allColumns = { Constants._ID, Constants.SCHEDULE_DATE };
+    private String[] allColumns = { Constants._ID, Constants.SCHEDULE_DATE, Constants.SCHEDULE_RINGTONE,
+    Constants.SCHEDULE_ENABLED };
 
     public ScheduleDataSource(Context context) {
         dbHelper = new DBHelper(context);
@@ -33,15 +34,18 @@ public class ScheduleDataSource {
         dbHelper.close();
     }
 
-    public Schedule createSchedule(long date, Context context) {
+    public Schedule createSchedule(long date, int ringtone, int enabled, Context context) {
         ContentValues values = new ContentValues();
         values.put(Constants.SCHEDULE_DATE, date);
+        values.put(Constants.SCHEDULE_RINGTONE, ringtone);
+        values.put(Constants.SCHEDULE_ENABLED, enabled);
         long insertId = database.insert(Constants.TABLE_SCHEDULE, null,
                 values);
         Cursor cursor = database.query(Constants.TABLE_SCHEDULE,
                 allColumns, Constants._ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
+
         Schedule schedule = cursorToSchedule(cursor);
         cursor.close();
         //SystemUtils.createScheduleNotification(context, schedule);
@@ -53,9 +57,13 @@ public class ScheduleDataSource {
     public void updateSchedule(Schedule s) {
         long id = s.getId();
         long date = s.getDate();
+        int ringtone = s.getRingtone();
+        int enabled = s.getEnabled();
         Log.w("TAG", String.valueOf(date));
         ContentValues values = new ContentValues();
         values.put(Constants.SCHEDULE_DATE, date);
+        values.put(Constants.SCHEDULE_RINGTONE, ringtone);
+        values.put(Constants.SCHEDULE_ENABLED, enabled);
         database.update(Constants.TABLE_SCHEDULE, values, Constants._ID + "=?", new String[]{String.valueOf(id)});
     }
 
@@ -87,6 +95,9 @@ public class ScheduleDataSource {
         Schedule schedule = new Schedule();
         schedule.setId(cursor.getLong(0));
         schedule.setDate(cursor.getLong(1));
+        schedule.setRingtone(cursor.getInt(2));
+        schedule.setEnabled(cursor.getInt(3));
+
         return schedule;
     }
 }

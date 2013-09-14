@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New ToggleButton"
+        android:id="@+id/toggleButton"
+        android:layout_gravity="center_horizontal|top"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <RelativeLayout
+
+        android:layout_toLeftOf="@+id/toggleButton"
+        android:layout_alignBottom="@+id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -13,8 +30,6 @@
             android:id="@+id/textView"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/toggleButton"
-            android:layout_alignBottom="@+id/toggleButton"
             android:gravity="center_horizontal"/>
 
     <TextView
@@ -25,5 +40,6 @@
             android:id="@+id/textView2"
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

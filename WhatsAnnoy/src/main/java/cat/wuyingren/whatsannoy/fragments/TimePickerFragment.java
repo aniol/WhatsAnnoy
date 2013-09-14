@@ -1,6 +1,7 @@
 package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.DialogInterface;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
@@ -20,6 +21,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
 
     public static final String ARG_SCHEDULE = "schedule";
+    public static final String ARG_UPDATE = "update";
     private ScheduleDataSource dataSource;
     private OnDBChangedListener mCallback;
 
@@ -45,6 +47,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         if(s!=null) {
             c.setTimeInMillis(s.getDate());
         }
+        c.add(Calendar.MINUTE, 5);  // add 5 minutes
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
@@ -67,6 +70,10 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             c.add(Calendar.DAY_OF_YEAR,1);
         }
 
+        if(!args.getBoolean(ARG_UPDATE)) { // if creating new schedule
+            //c.add(Calendar.MINUTE, 5); // add 5 minutes
+        }
+
         long date = c.getTimeInMillis();
         //Schedule schedule = new Schedule();
         //schedule = dataSource.createSchedule(date);
@@ -76,7 +83,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             dataSource.updateSchedule(s);
         }
         else {
-            dataSource.createSchedule(date, getSupportActivity());
+            dataSource.createSchedule(date, 0, 1, getSupportActivity());
         }
         dataSource.close();
     }

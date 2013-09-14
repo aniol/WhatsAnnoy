@@ -2,6 +2,7 @@ package cat.wuyingren.whatsannoy.profiles;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +11,8 @@ public class Schedule implements Parcelable {
 
     private long id;
     private long date;
+    private int ringtone;
+    private int enabled;
 
     public Schedule() {
 
@@ -35,6 +38,40 @@ public class Schedule implements Parcelable {
         this.date = date;
     }
 
+    public int getRingtone() {
+        return ringtone;
+    }
+
+    public void setRingtone(int ringtone) {
+        this.ringtone = ringtone;
+    }
+
+    public boolean isEnabled() {
+        if (enabled==0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setIsEnabled(boolean enabled) {
+        if(!enabled) {
+            this.enabled = 0;
+        }
+        else {
+            this.enabled = 1;
+        }
+    }
+
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
@@ -52,6 +89,8 @@ public class Schedule implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+        dest.writeInt(this.enabled);
+        dest.writeInt(this.ringtone);
         dest.writeLong(this.date);
         dest.writeLong(this.id);
 
@@ -59,8 +98,10 @@ public class Schedule implements Parcelable {
 
     private void readFromParcel(Parcel in) {
 
-        id = in.readLong();
-        date = in.readLong();
+        this.enabled = in.readInt();
+        this.ringtone = in.readInt();
+        this.date = in.readLong();
+        this.id = in.readLong();
 
     }
 

@@ -1,13 +1,16 @@
 package cat.wuyingren.whatsannoy.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,7 +36,7 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.schedulelist_row_layout, parent, false);
@@ -46,6 +49,20 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
 
         TextView tView2 = (TextView) rowView.findViewById(R.id.textView2);
         tView2.setText(sdf2.format(resultdate));
+
+        final Schedule s = values.get(position);
+        ToggleButton tButton = (ToggleButton) rowView.findViewById(R.id.toggleButton);
+        tButton.setChecked(values.get(position).isEnabled());
+        tButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //if(isChecked) {
+                    s.setIsEnabled(isChecked);
+                    dataSource.open();
+                    dataSource.updateSchedule(s);
+                //}
+            }
+        });
 /*
         final Schedule s = values.get(position);
         ImageButton b2 = (ImageButton) rowView.findViewById(R.id.Button2);

@@ -41,6 +41,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activities.SettingsScheduleActivity"
+            android:label="@string/app_name"></activity>
+
         <receiver  android:process=":remote" android:name=".utils.Alarm"></receiver>
     </application>
 

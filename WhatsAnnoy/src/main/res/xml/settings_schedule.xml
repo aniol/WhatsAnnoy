@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        holo:title="@string/pref_general_title"
+        holo:key="pref_general_title_settings">
+
+        <CheckBoxPreference
+            holo:title="Enabled"
+            holo:id="@+id/alarm_enabled"
+            holo:key="pref_sched_enabled" />
+
+
+        <RingtonePreference
+            holo:title="@string/pref_title_sound"
+            holo:id="@+id/rtone_pref"
+            holo:key="pref_general_sound_key"
+            holo:summary="@string/pref_summary_sound"
+            holo:ringtoneType="notification" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

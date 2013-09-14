@@ -1,6 +1,7 @@
 package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
@@ -15,6 +16,7 @@ import org.holoeverywhere.app.ListFragment;
 import org.holoeverywhere.widget.ListView;
 
 import cat.wuyingren.whatsannoy.R;
+import cat.wuyingren.whatsannoy.activities.SettingsScheduleActivity;
 import cat.wuyingren.whatsannoy.adapters.ScheduleListAdapter;
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
@@ -126,6 +128,24 @@ public class ScheduleFragment extends ListFragment {
                 return true;
             }
         });
+
+        lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Display the fragment as the main content.
+                /*getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.pager, new SettingsScheduleActivity())
+                        .commit();*/
+                Intent i = new Intent(context, SettingsScheduleActivity.class);
+                Bundle b = new Bundle();
+                Schedule s = adapter.getItem(position);
+                /*Log.w("TAG", "FRG " + s.getDate());
+                Log.w("TAG", "FRG " + s.getEnabled());*/
+                b.putParcelable(SettingsScheduleActivity.ARG_SCHEDULE, s);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -156,6 +176,7 @@ public class ScheduleFragment extends ListFragment {
     private void scheduleNew() {
         DialogFragment df = new TimePickerFragment();
         Bundle b = new Bundle();
+        b.putBoolean(TimePickerFragment.ARG_UPDATE, false);
         df.setArguments(b);
         df.show(getActivity().getSupportFragmentManager(), "timePicker");
     }
@@ -164,6 +185,7 @@ public class ScheduleFragment extends ListFragment {
         DialogFragment df = new TimePickerFragment();
         Bundle b = new Bundle();
         b.putParcelable(TimePickerFragment.ARG_SCHEDULE, s);
+        b.putBoolean(TimePickerFragment.ARG_UPDATE, true);
         Log.w("TAG", String.valueOf(s.getDate()));
         df.setArguments(b);
         df.show(getActivity().getSupportFragmentManager(), "timePicker");
@@ -178,6 +200,7 @@ public class ScheduleFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        dataSource.open();
         if(dataSource == null) {
             initDB();
         }

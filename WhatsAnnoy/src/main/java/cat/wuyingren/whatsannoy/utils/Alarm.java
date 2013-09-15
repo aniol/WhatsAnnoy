@@ -21,12 +21,12 @@ public class Alarm extends BroadcastReceiver {
         wl.acquire();
 
         SystemUtils.createScheduleNotification(context, s);
-        if(s!=null) {
+        /*if(s!=null) {
             ScheduleDataSource sDS = new ScheduleDataSource(context);
             sDS.open();
             sDS.deleteSchedule(s);
             sDS.close();
-        }
+        }*/
 
         wl.release();
     }

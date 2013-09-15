@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String DATABASE_CREATE = "create table "
             + Constants.TABLE_SCHEDULE + "(" + Constants._ID
             + " integer primary key autoincrement, " + Constants.SCHEDULE_DATE
-            + " bigint not null, " + Constants.SCHEDULE_RINGTONE + " integer, "
+            + " bigint not null, " + Constants.SCHEDULE_RINGTONE + " text, "
             + Constants.SCHEDULE_ENABLED + " integer not null);";
 
     public DBHelper(Context context) {

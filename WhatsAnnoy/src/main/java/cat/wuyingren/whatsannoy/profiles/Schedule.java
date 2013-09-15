@@ -1,5 +1,6 @@
 package cat.wuyingren.whatsannoy.profiles;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -11,7 +12,7 @@ public class Schedule implements Parcelable {
 
     private long id;
     private long date;
-    private int ringtone;
+    private String ringtone;
     private int enabled;
 
     public Schedule() {
@@ -38,11 +39,11 @@ public class Schedule implements Parcelable {
         this.date = date;
     }
 
-    public int getRingtone() {
+    public String getRingtone() {
         return ringtone;
     }
 
-    public void setRingtone(int ringtone) {
+    public void setRingtone(String ringtone) {
         this.ringtone = ringtone;
     }
 
@@ -90,7 +91,7 @@ public class Schedule implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeInt(this.enabled);
-        dest.writeInt(this.ringtone);
+        dest.writeString(this.ringtone);
         dest.writeLong(this.date);
         dest.writeLong(this.id);
 
@@ -99,7 +100,7 @@ public class Schedule implements Parcelable {
     private void readFromParcel(Parcel in) {
 
         this.enabled = in.readInt();
-        this.ringtone = in.readInt();
+        this.ringtone = in.readString();
         this.date = in.readLong();
         this.id = in.readLong();
 

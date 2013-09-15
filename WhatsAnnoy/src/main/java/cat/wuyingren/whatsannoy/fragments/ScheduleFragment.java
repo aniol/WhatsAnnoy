@@ -204,6 +204,9 @@ public class ScheduleFragment extends ListFragment {
         if(dataSource == null) {
             initDB();
         }
+        else {
+            updateDB();
+        }
     }
 
     private void initDB() {

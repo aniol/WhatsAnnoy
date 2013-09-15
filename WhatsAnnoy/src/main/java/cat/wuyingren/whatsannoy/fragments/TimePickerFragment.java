@@ -47,7 +47,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         if(s!=null) {
             c.setTimeInMillis(s.getDate());
         }
-        c.add(Calendar.MINUTE, 5);  // add 5 minutes
+        else {
+            c.add(Calendar.MINUTE, 5);  // add 5 minutes
+        }
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
@@ -70,9 +72,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             c.add(Calendar.DAY_OF_YEAR,1);
         }
 
-        if(!args.getBoolean(ARG_UPDATE)) { // if creating new schedule
+//        if(!args.getBoolean(ARG_UPDATE)) { // if creating new schedule
             //c.add(Calendar.MINUTE, 5); // add 5 minutes
-        }
+       // }
 
         long date = c.getTimeInMillis();
         //Schedule schedule = new Schedule();

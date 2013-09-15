@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
@@ -18,6 +19,7 @@ import java.util.Random;
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.activities.MainActivity;
 import cat.wuyingren.whatsannoy.profiles.Schedule;
+import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
 public class SystemUtils {
 
@@ -26,10 +28,16 @@ public class SystemUtils {
     }
 
     public static int createScheduleNotification(Context context, Schedule s) {
+
+        ScheduleDataSource dataSource;
+
+        dataSource = new ScheduleDataSource(context);
+        dataSource.open();
         Random r = new Random();
         int mId = r.nextInt();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String uri = prefs.getString("pref_general_sound_key", "");
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Log.w("TAG", "ring - " + s.getRingtone());
+        String uri = s.getRingtone(); // prefs.getString("pref_general_sound_key", "");
         Uri ringtone = Uri.parse(uri);
         if(uri.isEmpty()) {
             ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
@@ -63,6 +71,10 @@ public class SystemUtils {
         mBuilder.setSound(ringtone);
         //っっzmBuilder.setWhen(s.getDate());
         mNotificationManager.notify(mId, mBuilder.build());
+        s.setIsEnabled(false);
+        dataSource.updateSchedule(s);
+        dataSource.close();
         return mId;
     }
+
 }

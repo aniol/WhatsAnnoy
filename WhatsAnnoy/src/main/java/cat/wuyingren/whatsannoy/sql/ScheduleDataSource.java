@@ -57,9 +57,8 @@ public class ScheduleDataSource {
     public void updateSchedule(Schedule s) {
         long id = s.getId();
         long date = s.getDate();
-        int ringtone = s.getRingtone();
+        String ringtone = s.getRingtone();
         int enabled = s.getEnabled();
-        Log.w("TAG", String.valueOf(date));
         ContentValues values = new ContentValues();
         values.put(Constants.SCHEDULE_DATE, date);
         values.put(Constants.SCHEDULE_RINGTONE, ringtone);
@@ -95,7 +94,7 @@ public class ScheduleDataSource {
         Schedule schedule = new Schedule();
         schedule.setId(cursor.getLong(0));
         schedule.setDate(cursor.getLong(1));
-        schedule.setRingtone(cursor.getInt(2));
+        schedule.setRingtone(cursor.getString(2));
         schedule.setEnabled(cursor.getInt(3));
 
         return schedule;

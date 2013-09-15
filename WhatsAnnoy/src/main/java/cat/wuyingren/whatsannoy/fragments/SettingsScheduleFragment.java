@@ -1,6 +1,7 @@
 package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import org.holoeverywhere.preference.CheckBoxPreference;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.PreferenceFragment;
+import org.holoeverywhere.preference.RingtonePreference;
 
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.activities.SettingsScheduleActivity;
@@ -43,6 +45,7 @@ public class SettingsScheduleFragment extends PreferenceFragment{
         s = args.getParcelable(SettingsScheduleActivity.ARG_SCHEDULE);
 
         dataSource = new ScheduleDataSource(context);
+        dataSource.open();
     }
 
     @Override
@@ -54,15 +57,26 @@ public class SettingsScheduleFragment extends PreferenceFragment{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 s.setIsEnabled(cbox.isChecked());
-                dataSource.open();
                 dataSource.updateSchedule(s);
                 return true;
             }
         });
 
+        final RingtonePreference rng = (RingtonePreference) findPreference(R.id.rtone_pref);
+        rng.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                Log.w("TAG", o.toString());
+                s.setRingtone(o.toString());
+                dataSource.updateSchedule(s);
+                Log.w("TAG", s.getRingtone());
+                return false;
+            }
+        });
+
         if(s!=null) {
-            Log.w("TAG", String.valueOf(s.getEnabled()));
             cbox.setChecked(s.isEnabled());
+
         }
     }
 

@@ -31,7 +31,7 @@ public class SystemUtils {
         dataSource = new ScheduleDataSource(context);
         dataSource.open();
         Random r = new Random();
-        int mId = r.nextInt();
+        int mId = 0;// r.nextInt();
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Log.w("TAG", "ring - " + s.getRingtone());
         String uri = s.getRingtone(); // prefs.getString("pref_general_sound_key", "");
@@ -66,12 +66,19 @@ public class SystemUtils {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
         mBuilder.setSound(ringtone);
-        //っっzmBuilder.setWhen(s.getDate());
+        //mBuilder.setWhen(s.getDate());
         mNotificationManager.notify(mId, mBuilder.build());
         s.setIsEnabled(false);
-        dataSource.updateSchedule(s);
+        dataSource.updateSchedule(context, s);
         dataSource.close();
         return mId;
     }
 
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                    (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
+    }
 }

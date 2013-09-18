@@ -38,7 +38,7 @@ public class ScheduleFragment extends ListFragment {
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
             MenuInflater inflater = actionMode.getMenuInflater();
             inflater.inflate(R.menu.cab_list, menu);
-           // actionMode.setTitle("1 selected");
+            actionMode.setTitle(getResources().getString(R.string.actionmode_title));
             return true;
         }
 

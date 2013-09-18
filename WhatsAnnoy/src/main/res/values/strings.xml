@@ -40,4 +40,6 @@
 
     <string name="error">Error</string>
     <string name="notification">Look at your friends faces!</string>
+
+    <string name="actionmode_title">Select an action: </string>
 </resources>

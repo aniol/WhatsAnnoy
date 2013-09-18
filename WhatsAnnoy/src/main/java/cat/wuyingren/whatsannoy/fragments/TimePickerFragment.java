@@ -1,5 +1,6 @@
 package cat.wuyingren.whatsannoy.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public static final String ARG_UPDATE = "update";
     private ScheduleDataSource dataSource;
     private OnDBChangedListener mCallback;
+    private Context context;
 
     private Schedule s;
     private Bundle args;
@@ -39,6 +41,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
+
+        context = getActivity();
 
         if(args!=null) {
             s = args.getParcelable(ARG_SCHEDULE);
@@ -82,11 +86,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         dataSource.open();
         if(s!=null) {
             s.setDate(date);
-            dataSource.updateSchedule(s);
+            dataSource.updateSchedule(context, s);
         }
         else {
             dataSource.createSchedule(date, RingtoneManager.getActualDefaultRingtoneUri(getSupportActivity(), RingtoneManager.TYPE_NOTIFICATION).toString(),
-                    0, getSupportActivity());
+                    1, getSupportActivity());
         }
         dataSource.close();
     }

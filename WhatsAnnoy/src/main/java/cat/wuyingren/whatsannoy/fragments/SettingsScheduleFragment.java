@@ -1,6 +1,7 @@
 package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -34,7 +35,7 @@ public class SettingsScheduleFragment extends PreferenceFragment{
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_schedule);
 
-        context = getSupportActivity();
+        context = getActivity();
 
         actBar = getSupportActionBar();
         actBar.setHomeButtonEnabled(true);
@@ -57,19 +58,20 @@ public class SettingsScheduleFragment extends PreferenceFragment{
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 s.setIsEnabled((Boolean) o);
-                dataSource.updateSchedule(s);
+                dataSource.updateSchedule(context, s);
                 return true;
             }
         });
 
         final RingtonePreference rng = (RingtonePreference) findPreference(R.id.rtone_pref);
         rng.setKey(rng.getKey()+position);
+        rng.setDefaultValue(Uri.parse(s.getRingtone()));
         rng.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 //Log.w("TAG", o.toString());
                 s.setRingtone(o.toString());
-                dataSource.updateSchedule(s);
+                dataSource.updateSchedule(context, s);
                 //Log.w("TAG", s.getRingtone());
                 return false;
             }

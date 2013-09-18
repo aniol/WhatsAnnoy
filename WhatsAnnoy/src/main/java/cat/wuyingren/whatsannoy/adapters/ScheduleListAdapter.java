@@ -17,7 +17,6 @@ import java.util.List;
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
-import cat.wuyingren.whatsannoy.utils.Alarm;
 
 
 public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
@@ -49,7 +48,7 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
         tView2.setText(sdf2.format(resultdate));
 
         final Schedule s = values.get(position);
-        final Alarm alarm = new Alarm();
+        //final Alarm alarm = new Alarm();
         ToggleButton tButton = (ToggleButton) rowView.findViewById(R.id.toggleButton);
         tButton.setChecked(values.get(position).isEnabled());
         tButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -58,15 +57,15 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
                 //if(isChecked) {
                     s.setIsEnabled(isChecked);
                     dataSource.open();
-                    dataSource.updateSchedule(s);
+                    dataSource.updateSchedule(context, s);
                 //}
-                if(isChecked) {
+                /*if(isChecked) {
                     //SystemUtils.createScheduleNotification(context, s);
                     alarm.setAlarm(context, s);
                 }
                 else {
-                    alarm.cancelAlarm(context);
-                }
+                    alarm.cancelAlarm(context, SystemUtils.safeLongToInt(s.getId()));
+                }*/
             }
         });
 /*

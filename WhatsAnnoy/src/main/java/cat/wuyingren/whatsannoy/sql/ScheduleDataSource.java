@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cat.wuyingren.whatsannoy.profiles.Schedule;
+import cat.wuyingren.whatsannoy.utils.Alarm;
+import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
 public class ScheduleDataSource {
 
@@ -46,12 +48,14 @@ public class ScheduleDataSource {
         Schedule schedule = cursorToSchedule(cursor);
         cursor.close();
         //SystemUtils.createScheduleNotification(context, schedule);
-        /*Alarm alarm = new Alarm();
-        alarm.setAlarm(context, schedule);*/
+        if(enabled==1) {
+            Alarm alarm = new Alarm();
+            alarm.setAlarm(context, schedule);
+        }
         return schedule;
     }
 
-    public void updateSchedule(Schedule s) {
+    public void updateSchedule(Context context, Schedule s) {
         long id = s.getId();
         long date = s.getDate();
         String ringtone = s.getRingtone();
@@ -61,6 +65,13 @@ public class ScheduleDataSource {
         values.put(Constants.SCHEDULE_RINGTONE, ringtone);
         values.put(Constants.SCHEDULE_ENABLED, enabled);
         database.update(Constants.TABLE_SCHEDULE, values, Constants._ID + "=?", new String[]{String.valueOf(id)});
+
+        if(s.isEnabled()) {
+            //Reset alarm
+            Alarm alarm = new Alarm();
+            alarm.cancelAlarm(context, SystemUtils.safeLongToInt(s.getId()));
+            alarm.setAlarm(context, s);
+        }
     }
 
     public void deleteSchedule(Schedule schedule) {
@@ -71,7 +82,7 @@ public class ScheduleDataSource {
     }
 
     public Schedule getScheduleByID(long id) {
-        Schedule s=new Schedule();
+        Schedule s;
         Cursor cursor = database.query(Constants.TABLE_SCHEDULE, allColumns, Constants._ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         //while(!cursor.isAfterLast()) {

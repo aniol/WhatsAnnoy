@@ -11,9 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import org.holoeverywhere.preference.PreferenceManager;
-import org.holoeverywhere.preference.SharedPreferences;
-
 import java.util.Random;
 
 import cat.wuyingren.whatsannoy.R;
@@ -41,7 +38,7 @@ public class SystemUtils {
         Uri ringtone = Uri.parse(uri);
         if(uri.isEmpty()) {
             ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
-     }
+        }
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_launcher)

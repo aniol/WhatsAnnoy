@@ -23,6 +23,7 @@ local.properties
 .idea/
 .gradle
 gradle
+gradlew
 gradlew.*
 /*/local.properties
 /*/out

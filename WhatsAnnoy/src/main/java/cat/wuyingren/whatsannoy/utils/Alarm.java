@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
+
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
 public class Alarm extends BroadcastReceiver {
 
-    private Schedule s;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -20,7 +22,17 @@ public class Alarm extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
-        SystemUtils.createScheduleNotification(context, s);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        long sID = preferences.getLong("pref_schedule_id", -1);
+        if(sID!= -1) {
+            ScheduleDataSource sDS = new ScheduleDataSource(context);
+            sDS.open();
+            Schedule s = sDS.getScheduleByID(sID);
+            SystemUtils.createScheduleNotification(context, s);
+            s.setIsEnabled(false);
+            sDS.updateSchedule(s);
+            sDS.close();
+        }
         /*if(s!=null) {
             ScheduleDataSource sDS = new ScheduleDataSource(context);
             sDS.open();
@@ -34,7 +46,11 @@ public class Alarm extends BroadcastReceiver {
 
     public void setAlarm(Context context, Schedule s)
     {
-        this.s = s;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putLong("pref_schedule_id", s.getId());
+        edit.commit();
+
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Alarm.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);

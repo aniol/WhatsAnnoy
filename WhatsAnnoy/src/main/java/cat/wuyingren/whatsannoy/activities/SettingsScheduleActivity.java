@@ -3,7 +3,6 @@ package cat.wuyingren.whatsannoy.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import org.holoeverywhere.app.Activity;
@@ -17,7 +16,7 @@ public class SettingsScheduleActivity extends Activity {
     private ActionBar actBar;
     private Bundle args;
     public static final String ARG_SCHEDULE = "schedule";
-
+    public static final String ARG_POSITION = "position";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

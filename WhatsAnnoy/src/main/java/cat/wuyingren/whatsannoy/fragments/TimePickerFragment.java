@@ -85,7 +85,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             dataSource.updateSchedule(s);
         }
         else {
-            dataSource.createSchedule(date, 0, 1, getSupportActivity());
+            dataSource.createSchedule(date, RingtoneManager.getActualDefaultRingtoneUri(getSupportActivity(), RingtoneManager.TYPE_NOTIFICATION).toString(),
+                    0, getSupportActivity());
         }
         dataSource.close();
     }

@@ -5,14 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cat.wuyingren.whatsannoy.profiles.Schedule;
-import cat.wuyingren.whatsannoy.utils.Alarm;
-import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
 public class ScheduleDataSource {
 
@@ -34,7 +31,7 @@ public class ScheduleDataSource {
         dbHelper.close();
     }
 
-    public Schedule createSchedule(long date, int ringtone, int enabled, Context context) {
+    public Schedule createSchedule(long date, String ringtone, int enabled, Context context) {
         ContentValues values = new ContentValues();
         values.put(Constants.SCHEDULE_DATE, date);
         values.put(Constants.SCHEDULE_RINGTONE, ringtone);
@@ -49,8 +46,8 @@ public class ScheduleDataSource {
         Schedule schedule = cursorToSchedule(cursor);
         cursor.close();
         //SystemUtils.createScheduleNotification(context, schedule);
-        Alarm alarm = new Alarm();
-        alarm.setAlarm(context, schedule);
+        /*Alarm alarm = new Alarm();
+        alarm.setAlarm(context, schedule);*/
         return schedule;
     }
 
@@ -71,6 +68,17 @@ public class ScheduleDataSource {
         System.out.println("Comment deleted with id: " + id);
         database.delete(Constants.TABLE_SCHEDULE, Constants._ID
                 + " = " + id, null);
+    }
+
+    public Schedule getScheduleByID(long id) {
+        Schedule s=new Schedule();
+        Cursor cursor = database.query(Constants.TABLE_SCHEDULE, allColumns, Constants._ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
+        //while(!cursor.isAfterLast()) {
+            s = cursorToSchedule(cursor);
+          //  cursor.moveToNext();
+        //}
+        return s;
     }
 
     public List<Schedule> getAllSchedules() {

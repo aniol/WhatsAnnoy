@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -139,9 +138,8 @@ public class ScheduleFragment extends ListFragment {
                 Intent i = new Intent(context, SettingsScheduleActivity.class);
                 Bundle b = new Bundle();
                 Schedule s = adapter.getItem(position);
-                /*Log.w("TAG", "FRG " + s.getDate());
-                Log.w("TAG", "FRG " + s.getEnabled());*/
                 b.putParcelable(SettingsScheduleActivity.ARG_SCHEDULE, s);
+                b.putInt(SettingsScheduleActivity.ARG_POSITION, position);
                 i.putExtras(b);
                 startActivity(i);
             }
@@ -186,7 +184,6 @@ public class ScheduleFragment extends ListFragment {
         Bundle b = new Bundle();
         b.putParcelable(TimePickerFragment.ARG_SCHEDULE, s);
         b.putBoolean(TimePickerFragment.ARG_UPDATE, true);
-        Log.w("TAG", String.valueOf(s.getDate()));
         df.setArguments(b);
         df.show(getActivity().getSupportFragmentManager(), "timePicker");
     }

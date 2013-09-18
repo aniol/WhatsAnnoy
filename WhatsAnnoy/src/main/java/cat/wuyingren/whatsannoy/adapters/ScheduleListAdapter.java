@@ -1,11 +1,9 @@
 package cat.wuyingren.whatsannoy.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.ArrayAdapter;
@@ -13,13 +11,13 @@ import org.holoeverywhere.widget.TextView;
 import org.holoeverywhere.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
+import cat.wuyingren.whatsannoy.utils.Alarm;
 
 
 public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
@@ -51,6 +49,7 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
         tView2.setText(sdf2.format(resultdate));
 
         final Schedule s = values.get(position);
+        final Alarm alarm = new Alarm();
         ToggleButton tButton = (ToggleButton) rowView.findViewById(R.id.toggleButton);
         tButton.setChecked(values.get(position).isEnabled());
         tButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -61,6 +60,13 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
                     dataSource.open();
                     dataSource.updateSchedule(s);
                 //}
+                if(isChecked) {
+                    //SystemUtils.createScheduleNotification(context, s);
+                    alarm.setAlarm(context, s);
+                }
+                else {
+                    alarm.cancelAlarm(context);
+                }
             }
         });
 /*

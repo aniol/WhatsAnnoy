@@ -1,10 +1,8 @@
 package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 
 import org.holoeverywhere.preference.CheckBoxPreference;
@@ -23,6 +21,7 @@ public class SettingsScheduleFragment extends PreferenceFragment{
     private ActionBar actBar;
     private Bundle args;
     private Schedule s;
+    private int position;
     private ScheduleDataSource dataSource;
     private Context context;
 
@@ -43,6 +42,7 @@ public class SettingsScheduleFragment extends PreferenceFragment{
 
         args = getArguments();
         s = args.getParcelable(SettingsScheduleActivity.ARG_SCHEDULE);
+        position = args.getInt(SettingsScheduleActivity.ARG_POSITION);
 
         dataSource = new ScheduleDataSource(context);
         dataSource.open();
@@ -53,23 +53,24 @@ public class SettingsScheduleFragment extends PreferenceFragment{
         super.onViewCreated(view, savedInstanceState);
 
         final CheckBoxPreference cbox = (CheckBoxPreference) findPreference(R.id.alarm_enabled);
-        cbox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        cbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                s.setIsEnabled(cbox.isChecked());
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                s.setIsEnabled((Boolean) o);
                 dataSource.updateSchedule(s);
                 return true;
             }
         });
 
         final RingtonePreference rng = (RingtonePreference) findPreference(R.id.rtone_pref);
+        rng.setKey(rng.getKey()+position);
         rng.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                Log.w("TAG", o.toString());
+                //Log.w("TAG", o.toString());
                 s.setRingtone(o.toString());
                 dataSource.updateSchedule(s);
-                Log.w("TAG", s.getRingtone());
+                //Log.w("TAG", s.getRingtone());
                 return false;
             }
         });

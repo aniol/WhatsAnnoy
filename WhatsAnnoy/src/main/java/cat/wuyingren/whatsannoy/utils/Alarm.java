@@ -1,3 +1,26 @@
+/** Copyright (c) 2013 Jordi López <@wuyingren> & <@aniol>
+ *
+ * MIT License:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 package cat.wuyingren.whatsannoy.utils;
 
 import android.app.AlarmManager;
@@ -8,11 +31,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.util.Log;
-
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 
+/**
+ * @author Jordi López <wuyingren>
+ */
 public class Alarm extends BroadcastReceiver {
 
 
@@ -22,10 +46,8 @@ public class Alarm extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
-        Log.w("TAG", "Context "+ context.toString());
         Bundle b = intent.getExtras();
         long aID = b.getLong("alarmID");
-        Log.w("TAG", "w " + aID);
         SharedPreferences preferences = context.getSharedPreferences("BRec_"+aID, Context.MODE_PRIVATE);
         long sID = preferences.getLong("pref_schedule_id", -1);
         if(sID!= -1) {
@@ -36,6 +58,11 @@ public class Alarm extends BroadcastReceiver {
             s.setIsEnabled(false);
             sDS.updateSchedule(context, s);
             sDS.close();
+        }
+        else {
+            b.setClassLoader(Schedule.class.getClassLoader());
+            Schedule s = (Schedule)b.getParcelable("schedule");
+            SystemUtils.createScheduleNotification(context, s);
         }
         /*if(s!=null) {
             ScheduleDataSource sDS = new ScheduleDataSource(context);
@@ -55,12 +82,11 @@ public class Alarm extends BroadcastReceiver {
         edit.putLong("pref_schedule_id", s.getId());
         edit.commit();
 
-        Log.w("TAG", "Context "+ context.toString());
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Alarm.class);
         Bundle b = new Bundle();
-        Log.w("TAG", "r " + s.getId());
         b.putLong("alarmID", s.getId());
+        b.putParcelable("schedule", s);
         i.putExtras(b);
 
         PendingIntent pi = PendingIntent.getBroadcast(context, SystemUtils.safeLongToInt(s.getId()) , i, PendingIntent.FLAG_CANCEL_CURRENT);

@@ -222,13 +222,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
 
     @Override
     protected void onPause() {
-        super.onPause();
         unregisterReceiver(broadcastReceiver);
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(broadcastReceiver, new IntentFilter(RandomNotificationService.BROADCAST_ACTION));
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

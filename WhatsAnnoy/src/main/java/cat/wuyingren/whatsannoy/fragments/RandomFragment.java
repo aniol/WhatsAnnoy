@@ -53,11 +53,14 @@ public class RandomFragment extends Fragment {
     private Context context;
     private View rootView;
     private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private int sBar_value = 0;
 
     private ToggleButton tBut;
     private ProgressBar pBar;
     private SeekBar sBar;
+
+    private boolean serviceOn = false;
 
     private CountDownTimer cdt;
 
@@ -67,6 +70,7 @@ public class RandomFragment extends Fragment {
      * new fragment to the client.
      */
     public static RandomFragment newInstance() {
+        Log.w("TAG", "newInstance()");
         RandomFragment fragment = new RandomFragment();
         return fragment;
     }
@@ -74,19 +78,25 @@ public class RandomFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.w("TAG", "onCreate()");
         super.onCreate(savedInstanceState);
         //setHasOptionsMenu(false);
         context = getActivity();
         prefs = getDefaultSharedPreferences();
+        editor = prefs.edit();
+        setRetainInstance(true);
+
     }
 
     public void updateUI(Intent intent) {
+        Log.w("TAG", "updateUI()");
         boolean serviceRunning = intent.getBooleanExtra("isRunning", false);
         long serviceDate = intent.getLongExtra("date", 0);
 
         Log.w("TAG", "Received date: " + serviceDate + " and status: " + serviceRunning);
         if(serviceRunning) {
             tBut.setChecked(true);
+            serviceOn = true;
         }
         else {
             tBut.setChecked(false);
@@ -102,6 +112,8 @@ public class RandomFragment extends Fragment {
             }
             final int maxFinal = max;
             pBar.setMax(max/1000);
+            editor.putInt("randomfragment_pbar_max", pBar.getMax());
+            editor.commit();
             Log.w("TAG", "Setting cdt. pBar is " + maxFinal);
             cdt = new CountDownTimer(maxFinal, 1000) {
                 @Override
@@ -120,11 +132,15 @@ public class RandomFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.w("TAG", "onCreateView()");
         rootView = inflater.inflate(R.layout.fragment_section_random, container, false);
 
         pBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        pBar.setMax(prefs.getInt("randomfragment_pbar_max", 100));
         pBar.setProgress(pBar.getMax());
 
         sBar = (SeekBar) rootView.findViewById(R.id.seekBar);
@@ -151,7 +167,7 @@ public class RandomFragment extends Fragment {
         tBut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if(isChecked && !serviceOn) {
                     // Start Random service
                     Intent intent = new Intent("cat.wuyingren.whatsannoy.services.RandomNotificationService");
                     Bundle b = new Bundle();
@@ -167,9 +183,12 @@ public class RandomFragment extends Fragment {
                         Log.w("TAG", "Canceling cdt");
                         cdt.cancel();
                     }
+                    serviceOn=false;
                 }
             }
         });
         return rootView;
     }
+
+
 }

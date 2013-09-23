@@ -51,6 +51,7 @@ public class NowFragment extends Fragment {
     private Context context;
     private View rootView;
     private SharedPreferences prefs;
+    private MediaPlayer mPlayer;
 
     /**
      * Static factory method that takes an int parameter,
@@ -83,7 +84,7 @@ public class NowFragment extends Fragment {
                     if(uri.isEmpty()) {
                         ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
                     }
-                    MediaPlayer mPlayer = new MediaPlayer();
+                    mPlayer = new MediaPlayer();
                     mPlayer.setDataSource(context, ringtone);
                     AudioManager aManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                     if(aManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) !=0 ) {
@@ -95,6 +96,9 @@ public class NowFragment extends Fragment {
                 }
                 catch(IOException e) {
 
+                }
+                finally {
+                    //mPlayer.release();
                 }
             }
         });

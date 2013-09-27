@@ -25,6 +25,7 @@ package cat.wuyingren.whatsannoy.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -49,7 +50,7 @@ import cat.wuyingren.whatsannoy.services.RandomNotificationService;
  */
 public class RandomFragment extends Fragment {
 
-   // public static final String ARG_SECTION_NUMBER = "section_number";
+    // public static final String ARG_SECTION_NUMBER = "section_number";
     private Context context;
     private View rootView;
     private SharedPreferences prefs;
@@ -61,6 +62,8 @@ public class RandomFragment extends Fragment {
     private SeekBar sBar;
 
     private boolean serviceOn = false;
+    private long serviceDate = 0;
+    private boolean unset = true;
 
     private CountDownTimer cdt;
 
@@ -81,40 +84,58 @@ public class RandomFragment extends Fragment {
         Log.w("TAG", "onCreate()");
         super.onCreate(savedInstanceState);
         //setHasOptionsMenu(false);
-        context = getActivity();
+        context = getSupportActivity().getApplicationContext();
         prefs = getDefaultSharedPreferences();
         editor = prefs.edit();
-        setRetainInstance(true);
 
     }
 
     public void updateUI(Intent intent) {
         Log.w("TAG", "updateUI()");
-        boolean serviceRunning = intent.getBooleanExtra("isRunning", false);
-        long serviceDate = intent.getLongExtra("date", 0);
+        if(unset)  {
+            unset= false;
+            boolean serviceRunning = intent.getBooleanExtra("isRunning", false);
+            serviceDate = intent.getLongExtra("date", 0);
 
-        Log.w("TAG", "Received date: " + serviceDate + " and status: " + serviceRunning);
-        if(serviceRunning) {
-            tBut.setChecked(true);
-            serviceOn = true;
-        }
-        else {
-            tBut.setChecked(false);
-            pBar.setProgress(pBar.getMax());
-        }
+            Log.w("TAG", "Received date: " + serviceDate + " and status: " + serviceRunning);
 
-        if(serviceDate!=0) {
             Calendar c = Calendar.getInstance();
             final long timeDistance = c.getTimeInMillis() - serviceDate;
             int max = (int) timeDistance;
             if(max<0) {
                 max = max * (-1);
             }
+
+            if(serviceRunning) {
+                //tBut.setChecked(true);
+                serviceOn = true;
+            }
+            else {
+                //tBut.setChecked(false);
+               // pBar.setProgress(pBar.getMax());
+
+                serviceOn = false;
+            }
+
+            startCountDown(serviceDate, max);
+        }
+    }
+
+    private void startCountDown(long count, int max) {
+
+        Log.w("TAG", "startCountDown()");
+        if(count!=0) {
             final int maxFinal = max;
+
             pBar.setMax(max/1000);
+            //editor.putLong("randomfragment_cdt_start", serviceDate);
             editor.putInt("randomfragment_pbar_max", pBar.getMax());
             editor.commit();
+
             Log.w("TAG", "Setting cdt. pBar is " + maxFinal);
+            if(cdt!=null) {
+                cdt.cancel();
+            }
             cdt = new CountDownTimer(maxFinal, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -125,6 +146,8 @@ public class RandomFragment extends Fragment {
 
                 @Override
                 public void onFinish() {
+                    //editor.putLong("randomfragment_cdt_start", 0);
+                    unset = true;
                     //pBar.setMax(pBar.getMax());
                 }
             }.start();
@@ -137,13 +160,30 @@ public class RandomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.w("TAG", "onCreateView()");
+        setRetainInstance(true);
         rootView = inflater.inflate(R.layout.fragment_section_random, container, false);
 
         pBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        pBar.setMax(prefs.getInt("randomfragment_pbar_max", 100));
-        pBar.setProgress(pBar.getMax());
 
         sBar = (SeekBar) rootView.findViewById(R.id.seekBar);
+
+        tBut = (ToggleButton) rootView.findViewById(R.id.toggleButton);
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.w("TAG", "onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
+
+        //pBar.setMax(prefs.getInt("randomfragment_pbar_max", 100));
+        pBar.setProgress(pBar.getMax());
+
+        serviceOn = prefs.getBoolean("randomfragment_service_status", false);
+        Log.w("TAG", "server is " + serviceOn);
+
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -162,33 +202,47 @@ public class RandomFragment extends Fragment {
             }
         });
 
-
-        tBut = (ToggleButton) rootView.findViewById(R.id.toggleButton);
         tBut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked && !serviceOn) {
+                if (isChecked && !serviceOn) {
                     // Start Random service
                     Intent intent = new Intent("cat.wuyingren.whatsannoy.services.RandomNotificationService");
                     Bundle b = new Bundle();
                     b.putInt(RandomNotificationService.ARG_FREQUENCY, sBar_value);
                     intent.putExtras(b);
                     context.startService(intent);
-                }
-                else {
-                    // Stop Random service
-                    Intent intent = new Intent("cat.wuyingren.whatsannoy.services.RandomNotificationService");
-                    context.stopService(intent);
-                    if(cdt!=null) {
-                        Log.w("TAG", "Canceling cdt");
-                        cdt.cancel();
+                    serviceOn = true;
+                } else {
+                    if (!isChecked && serviceOn) {
+                        // Stop Random service
+                        Intent intent = new Intent("cat.wuyingren.whatsannoy.services.RandomNotificationService");
+                        context.stopService(intent);
+                        if (cdt != null) {
+                            Log.w("TAG", "Canceling cdt");
+                            cdt.cancel();
+                        }
+                        serviceOn = false;
                     }
-                    serviceOn=false;
                 }
             }
         });
-        return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        Log.w("TAG", "onDestroyView()");
+        unset = true;
+        if(cdt!=null) cdt.cancel();
+        //editor.putInt("randomfragment_pbar_max", pBar.getMax());
+        editor.putBoolean("randomfragment_service_status", serviceOn);
+        editor.commit();
+        super.onDestroyView();
+    }
 
+    @Override
+    public void onPause() {
+        if(cdt!=null) cdt.cancel();
+        super.onPause();
+    }
 }

@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -56,6 +57,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
     private Menu menu;
     private int sdkVer;
 
+    protected waStateSaver saver;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -69,10 +71,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //Log.w("TAG", "BROADCAST RECEIVED");
-            mSectionsPagerAdapter.updateUIFromService(intent);
+            Log.w("TAG", "BROADCAST RECEIVED");
+            if(intent!=null && intent.getExtras()!=null) {
+                mSectionsPagerAdapter.updateUIFromService(intent);
+            }
         }
     };
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -84,7 +89,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        context = this;
+        saver = (waStateSaver) getLastCustomNonConfigurationInstance();
+        if(saver == null) {
+            saver = new waStateSaver();
+        }
+        if(saver.getReceiver()!=null) {
+            broadcastReceiver = saver.getReceiver();
+        }
+        context = getApplicationContext();
         sdkVer = SystemUtils.getSdkInt();
 
         // Set up the action bar.
@@ -192,7 +204,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
     }
 
     private void openSettings() {
-        Intent i = new Intent(this, SettingsActivity.class);
+        Intent i = new Intent(context, SettingsActivity.class);
         startActivity(i);
     }
 
@@ -222,19 +234,36 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Tim
 
     @Override
     protected void onPause() {
-        unregisterReceiver(broadcastReceiver);
+        getApplicationContext().unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(broadcastReceiver, new IntentFilter(RandomNotificationService.BROADCAST_ACTION));
+        getApplicationContext().registerReceiver(broadcastReceiver, new IntentFilter(RandomNotificationService.BROADCAST_ACTION));
+        saver.setReceiver(broadcastReceiver);
     }
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return saver;
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    private class waStateSaver {
+        private BroadcastReceiver receiver;
+
+        public BroadcastReceiver getReceiver() {
+            return receiver;
+        }
+
+        public void setReceiver(BroadcastReceiver receiver) {
+            this.receiver = receiver;
+        }
     }
 }

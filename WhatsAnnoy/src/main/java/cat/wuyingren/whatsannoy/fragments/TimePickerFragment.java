@@ -68,7 +68,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
 
-        context = getActivity();
+        context = getSupportActivity().getApplicationContext();
 
         if(args!=null) {
             s = args.getParcelable(ARG_SCHEDULE);

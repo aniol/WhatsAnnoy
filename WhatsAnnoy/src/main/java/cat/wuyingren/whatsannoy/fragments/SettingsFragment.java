@@ -23,6 +23,7 @@
  */
 package cat.wuyingren.whatsannoy.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -43,6 +44,7 @@ import cat.wuyingren.whatsannoy.activities.MainActivity;
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
     private ActionBar actBar;
+    private Context context;
 
     public SettingsFragment() {
 
@@ -52,6 +54,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
+
+        context = getSupportActivity().getApplicationContext();
 
         actBar = getSupportActionBar();
         actBar.setHomeButtonEnabled(true);
@@ -64,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(getActivity(), MainActivity.class);
+                Intent homeIntent = new Intent(context, MainActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
                 return true;

@@ -24,6 +24,7 @@
 
 package cat.wuyingren.whatsannoy.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -47,12 +48,14 @@ public class LicenseActivity extends Activity {
     private ActionBar actBar;
     private Resources res;
     private TextView tView;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
 
+        context = getApplicationContext();
         res=getResources();
         actBar = getSupportActionBar();
 
@@ -68,7 +71,7 @@ public class LicenseActivity extends Activity {
         switch(item.getItemId()) {
             case android.R.id.home:
 
-                Intent homeIntent = new Intent(this, MainActivity.class);
+                Intent homeIntent = new Intent(context, MainActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
                 return true;

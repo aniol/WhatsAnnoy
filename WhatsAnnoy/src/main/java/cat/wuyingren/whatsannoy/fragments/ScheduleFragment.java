@@ -126,7 +126,7 @@ public class ScheduleFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
+        context = getSupportActivity().getApplicationContext();
         sdkVer = getArguments().getInt(ARG_SDKVERSION_NUMBER);
         if (sdkVer>=11) {
             setHasOptionsMenu(true);

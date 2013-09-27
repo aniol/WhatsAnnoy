@@ -79,7 +79,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void updateUIFromService(Intent intent) {
+        if(intent!=null && intent.getExtras()!=null) {
         randomFragment.updateUI(intent);
+        }
     }
 
     @Override

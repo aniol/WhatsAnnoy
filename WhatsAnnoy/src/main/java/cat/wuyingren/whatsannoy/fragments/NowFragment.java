@@ -67,7 +67,7 @@ public class NowFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setHasOptionsMenu(false);
-        context = getActivity();
+        context = getSupportActivity().getApplicationContext();
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 

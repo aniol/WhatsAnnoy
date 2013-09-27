@@ -23,6 +23,7 @@
  */
 package cat.wuyingren.whatsannoy.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -39,12 +40,14 @@ import cat.wuyingren.whatsannoy.fragments.SettingsFragment;
 public class SettingsActivity extends Activity {
 
     private ActionBar actBar;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        context = getApplicationContext();
         actBar = getSupportActionBar();
 
         actBar.setHomeButtonEnabled(true);
@@ -61,7 +64,7 @@ public class SettingsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
+                Intent homeIntent = new Intent(context, MainActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
                 return true;

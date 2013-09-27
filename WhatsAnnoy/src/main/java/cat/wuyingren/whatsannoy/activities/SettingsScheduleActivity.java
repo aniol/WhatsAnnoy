@@ -23,6 +23,7 @@
  */
 package cat.wuyingren.whatsannoy.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -40,6 +41,7 @@ import cat.wuyingren.whatsannoy.profiles.Schedule;
 public class SettingsScheduleActivity extends Activity {
 
     private ActionBar actBar;
+    private Context context;
     private Bundle args;
     public static final String ARG_SCHEDULE = "schedule";
     public static final String ARG_POSITION = "position";
@@ -49,6 +51,8 @@ public class SettingsScheduleActivity extends Activity {
         super.onCreate(savedInstanceState);
         //addPreferencesFromResource(R.xml.settings);
         setContentView(R.layout.activity_settings);
+
+        context = getApplicationContext();
 
         actBar = getSupportActionBar();
         actBar.setHomeButtonEnabled(true);
@@ -77,7 +81,7 @@ public class SettingsScheduleActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
+                Intent homeIntent = new Intent(context, MainActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
                 return true;

@@ -60,7 +60,7 @@ public class SettingsScheduleFragment extends PreferenceFragment{
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_schedule);
 
-        context = getActivity();
+        context = getSupportActivity().getApplicationContext();
 
         actBar = getSupportActionBar();
         actBar.setHomeButtonEnabled(true);

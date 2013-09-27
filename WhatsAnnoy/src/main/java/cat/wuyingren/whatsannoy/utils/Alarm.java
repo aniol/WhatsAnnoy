@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
+
 import cat.wuyingren.whatsannoy.profiles.Schedule;
 import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
 

@@ -24,6 +24,7 @@
 package cat.wuyingren.whatsannoy.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,17 +54,14 @@ public class RandomNotificationService extends Service {
     private Calendar c = null;
     private Schedule s = new Schedule();
     private SharedPreferences prefs;
+    private Context context;
 
-    private boolean unset = true;
     private final Handler handler = new Handler();
     private Runnable sendUpdatesToUI = new Runnable() {
         public void run() {
-            if(unset) {
                 setUIInfo();
                 //handler.postDelayed(this, 5000); // 5 seconds
-                handler.postDelayed(this,2000);
-                unset=false;
-            }
+                handler.postDelayed(this,5000);
 
         }
     };
@@ -74,6 +72,7 @@ public class RandomNotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         intent = new Intent(BROADCAST_ACTION);
     }
 
@@ -88,7 +87,7 @@ public class RandomNotificationService extends Service {
 
         handler.removeCallbacks(sendUpdatesToUI);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Toast.makeText(this, "Start Service", Toast.LENGTH_SHORT).show();
 
         isRunning = true;
@@ -111,9 +110,9 @@ public class RandomNotificationService extends Service {
 
         isRunning = false;
         if(a!=null) {
-            a.cancelAlarm(getBaseContext(), -1);
+            a.cancelAlarm(context, -1);
         }
-        Toast.makeText(this, "Stop Service", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Stop Service", Toast.LENGTH_SHORT).show();
         //handler.postDelayed(sendUpdatesToUI, 1000);
 
     }
@@ -152,8 +151,8 @@ public class RandomNotificationService extends Service {
                         String uri = prefs.getString("pref_general_sound_key", "");
                         s.setRingtone(uri);
 
-                        a.setAlarm(getBaseContext(), s);
-                        unset=true;
+                        a.setAlarm(context, s);
+                        //unset=true;
                         handler.postDelayed(sendUpdatesToUI,1000);
                     }
                     else {

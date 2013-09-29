@@ -20,7 +20,7 @@ WhatsAnnoy
 ==========
 Released under MIT License
 Github: http://www.github.com/wuyingren/WhatsAnnoy
-Version: 0.1
+Version: 1.0
 
 Copyright (c) 2013 Jordi López <@wuyingren> & <@aniol>
 

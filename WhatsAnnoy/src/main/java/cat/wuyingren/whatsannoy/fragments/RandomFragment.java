@@ -44,6 +44,7 @@ import java.util.Calendar;
 
 import cat.wuyingren.whatsannoy.R;
 import cat.wuyingren.whatsannoy.services.RandomNotificationService;
+import cat.wuyingren.whatsannoy.utils.SystemUtils;
 
 /**
  * @author Jordi López (wuyingren)
@@ -64,6 +65,7 @@ public class RandomFragment extends Fragment {
     private boolean serviceOn = false;
     private long serviceDate = 0;
     private boolean unset = true;
+    private int layout = R.layout.fragment_section_random;
 
     private CountDownTimer cdt;
 
@@ -87,6 +89,7 @@ public class RandomFragment extends Fragment {
         context = getSupportActivity().getApplicationContext();
         prefs = getDefaultSharedPreferences();
         editor = prefs.edit();
+        setRetainInstance(true);
 
     }
 
@@ -112,7 +115,7 @@ public class RandomFragment extends Fragment {
             }
             else {
                 //tBut.setChecked(false);
-               // pBar.setProgress(pBar.getMax());
+                // pBar.setProgress(pBar.getMax());
 
                 serviceOn = false;
             }
@@ -160,8 +163,8 @@ public class RandomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.w("TAG", "onCreateView()");
-        setRetainInstance(true);
-        rootView = inflater.inflate(R.layout.fragment_section_random, container, false);
+        //rootView = inflater.inflate(R.layout.fragment_section_random, container, false);
+        rootView = inflater.inflate(layout, container, false);
 
         pBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
@@ -244,5 +247,21 @@ public class RandomFragment extends Fragment {
     public void onPause() {
         if(cdt!=null) cdt.cancel();
         super.onPause();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(SystemUtils.getSdkInt()<=10) {
+            if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Log.w("TAG", "onConfigChange LANDSCAPE");
+                layout = R.layout.fragment_section_random_land;
+            }
+            else {
+                Log.w("TAG", "onConfigChange PORTRAIT");
+                layout = R.layout.fragment_section_random;
+            }
+        }
     }
 }

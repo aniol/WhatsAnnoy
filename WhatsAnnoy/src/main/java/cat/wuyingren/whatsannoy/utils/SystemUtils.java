@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -45,9 +46,9 @@ import cat.wuyingren.whatsannoy.sql.ScheduleDataSource;
  */
 public class SystemUtils {
 
-    public static int getSdkInt() {
+    /*public static int getSdkInt() {
         return Build.VERSION.SDK_INT;
-    }
+    }*/
 
     public static int createScheduleNotification(Context context, Schedule s) {
 
@@ -104,5 +105,26 @@ public class SystemUtils {
                     (l + " cannot be cast to int without changing its value.");
         }
         return (int) l;
+    }
+
+
+    // Android 1.5 has no Build.VERSION.SDK_INT
+    public static int getSdkInt() {
+        if (Build.VERSION.RELEASE.startsWith("1.5"))
+            return 3;
+
+        try {
+            Log.d("TAG", String.valueOf(SDKHelper.getSdkIntInternal()));
+            return SDKHelper.getSdkIntInternal();
+        } catch (VerifyError e) {
+            return 3;
+        }
+    }
+
+    // Needed because Java will check if the class is valid. In Android 1.5, it will not.
+    private static class SDKHelper {
+        private static int getSdkIntInternal() {
+            return Build.VERSION.SDK_INT;
+        }
     }
 }

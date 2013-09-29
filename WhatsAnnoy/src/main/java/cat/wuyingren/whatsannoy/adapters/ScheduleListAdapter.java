@@ -24,6 +24,7 @@
 package cat.wuyingren.whatsannoy.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -67,6 +68,7 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
 
         Date resultdate = new Date(values.get(position).getDate());
+        tView.setTextColor(context.getResources().getColor(R.color.textGrey));
         tView.setText(sdf.format(resultdate));
 
         TextView tView2 = (TextView) rowView.findViewById(R.id.textView2);
@@ -75,6 +77,7 @@ public class ScheduleListAdapter extends ArrayAdapter<Schedule> {
         final Schedule s = values.get(position);
         //final Alarm alarm = new Alarm();
         ToggleButton tButton = (ToggleButton) rowView.findViewById(R.id.toggleButton);
+        tButton.setTextColor(context.getResources().getColor(R.color.textGrey));
         tButton.setChecked(values.get(position).isEnabled());
         tButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

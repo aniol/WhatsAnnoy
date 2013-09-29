@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Localizable strings -->
+    <string name="action_new">Nuevo</string>
+    <string name="action_settings">Opciones</string>
+    <string name="action_edit">Edita</string>
+    <string name="action_delete">Elimina</string>
+
+    <string name="title_section1">Ahora</string>
+    <string name="title_section2">Programa</string>
+    <string name="title_section3">Aleatorio</string>
+
+    <string name="section1_button">Reproduce</string>
+    <string name="section1_label">Reproduce el sonido ahora</string>
+
+    <string name="section3_pbar">Progreso…</string>
+    <string name="section3_label">Frecuencia de tiempo del sonido</string>
+
+    <string name="list_empty">No hay nada para mostrar</string>
+    <string name="main_credits">Idea y diseño de @aniol, código de @wuyingren</string>
+
+    <string name="pref_general_title">General</string>
+    <string name="pref_about_title">Acerca de</string>
+
+    <string name="pref_title_sound">Sonido</string>
+    <string name="pref_summary_sound">Escoge qué sonido quieres que se reproduzca</string>
+
+    <string name="pref_title_about">Acerca de la versión 1.0</string>
+    <string name="pref_summary_about">Créditos. Licencia.</string>
+
+    <string name="pref_title_credits">Créditos</string>
+    <string name="pref_title_license">Licencia</string>
+
+    <string name="pref_title_wa_license">Licencia</string>
+    <string name="mit_license">Información sobre licencia y distribución</string>
+
+    <string name="error">Error</string>
+    <string name="notification">¡Mira las caras de tus amigos!</string>
+
+    <string name="actionmode_title">Escoge una acción: </string>
+
+
+</resources>

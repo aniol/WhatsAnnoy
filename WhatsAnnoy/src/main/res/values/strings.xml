@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Common strings, don't localize -->
     <string name="app_name">WhatsAnnoy</string>
+
+    <!-- Localizable strings -->
     <string name="action_new">New</string>
     <string name="action_settings">Settings</string>
     <string name="action_edit">Edit</string>
@@ -14,14 +17,11 @@
     <string name="section1_button">Play</string>
     <string name="section1_label">Play the sound now</string>
 
-    <string name="section2_button1">Play</string>
-    <string name="section2_button2">Stop</string>
-
     <string name="section3_pbar">Progress…</string>
     <string name="section3_label">Time frequency of the sound</string>
 
     <string name="list_empty">No items to show</string>
-    <string name="main_credits">Idea and design by @aniol</string>
+    <string name="main_credits">Idea and design by @aniol, code by @wuyingren</string>
 
     <string name="pref_general_title">General</string>
     <string name="pref_about_title">About</string>
@@ -29,7 +29,7 @@
     <string name="pref_title_sound">Sound</string>
     <string name="pref_summary_sound">Choose which sound you like to play</string>
 
-    <string name="pref_title_about">About Version 0.1</string>ç
+    <string name="pref_title_about">About Version 1.0</string>
     <string name="pref_summary_about">Credits. License.</string>
 
     <string name="pref_title_credits">Credits</string>
